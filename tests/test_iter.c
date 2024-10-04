@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdio.h>
 
 #include "ialib.h"
 
@@ -37,6 +38,8 @@ static void test_iterative()
 
         ial_eval_policy_iterative(nb_states, nb_actions, policy_all_left, states, actions, nb_rewards, rewards, transitions, esperance, theta, gamma);
     }
+
+    printf("%lf\t%lf\t%lf\t%lf\t%lf", esperance[0], esperance[1], esperance[2], esperance[3], esperance[4]);
 
     free(transitions);
 }
