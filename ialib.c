@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <time.h>
+#include <math.h>
 
 char* ial_version(void)
 {
@@ -39,32 +40,34 @@ double min(double a, double b) {
 void ial_eval_policy_iterative(
     int nb_states,
     int nb_actions,
-    float pi[nb_states][nb_actions],
-    float env_S[nb_states],
-    float env_A[nb_actions],
+    double pi[nb_states][nb_actions],
+    int env_S[nb_states],
+    int env_A[nb_actions],
     int nb_rewards,
-    int env_R[nb_rewards],
-    float env_probas[nb_states][nb_actions][nb_states][nb_rewards],
-    float esperance[nb_states],
-    float theta,
-    float gamma)
+    double env_R[nb_rewards],
+    double (*env_probas)[nb_states][nb_actions][nb_states][nb_rewards],
+    double esperance[nb_states],
+    double theta,
+    double gamma)
 {
     while (1) {
-        float delta = 0.0;
+        double delta = 0.0;
         for (int s = 0; s < nb_states; s++) {
-            float v_prev = esperance[s];
-            float total = 0.0;
+            double v_prev = esperance[s];
+            double total = 0.0;
             for (int a =0; a < nb_actions; a++) {
                 for (int s_p = 0; s_p < nb_states; s_p++) {
                     for (int r_index = 0; r_index < nb_rewards; r_index++) {
-                        int r = env_R[r_index];
-                        total += pi[s][a] * env_probas[s][a][s_p][r_index] * (r + gamma * esperance[s_p]);
+                        double r = env_R[r_index];
+                        total += pi[s][a] * (*env_probas)[s][a][s_p][r_index] * (r + gamma * esperance[s_p]);
                     }
                 }
             }
+
             esperance[s] = total;
-            delta = max(delta, abs(v_prev - esperance[s]));
+            delta = max(delta, fabs(v_prev - esperance[s]));
         }
+        
         if (delta < theta) {
             break;
         }

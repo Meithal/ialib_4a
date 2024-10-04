@@ -16,13 +16,13 @@ void ial_start(void);
 void ial_eval_policy_iterative(
     int nb_states,
     int nb_actions,
-    float pi[nb_states][nb_actions],
-    float env_S[nb_states],
-    float env_A[nb_actions],
+    double pi[nb_states][nb_actions],
+    int env_S[nb_states],
+    int env_A[nb_actions],
     int nb_rewards,
-    int env_R[nb_rewards],
-    float env_p[nb_states][nb_actions][nb_states][nb_rewards],
-    float esperance[nb_states],
-    float theta,
-    float gamma
+    double env_R[nb_rewards],
+    double (*env_p)[nb_states][nb_actions][nb_states][nb_rewards],
+    double esperance[nb_states],
+    double theta,
+    double gamma
     );

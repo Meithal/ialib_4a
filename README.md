@@ -1,3 +1,8 @@
+Requirements
+---
+- Cmake
+- Compilateur C (visual studio...)
+
 Build
 ---
 
