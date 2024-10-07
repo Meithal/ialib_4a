@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(IALib LANGUAGES C CXX)
+project(IALib LANGUAGES C)
 
 add_library(ial STATIC ialib.c ialib.h)
 

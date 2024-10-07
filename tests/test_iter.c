@@ -5,26 +5,26 @@
 
 static void test_iterative()
 {
-    int states[] = { 0, 1, 2, 3, 4 };
+    int states[] = { 0, 1, 2, 3};
     int nb_states = sizeof states / sizeof states[0];
     enum {ACTION_LEFT, ACTION_RIGHT};
     int actions[] = {ACTION_LEFT, ACTION_RIGHT};
     int nb_actions = sizeof actions / sizeof actions[0];
     double rewards[] = {-1, 0, 1};
     int nb_rewards = sizeof rewards / sizeof rewards[0];
-    int etats_finaux[] = {0, 4};
+    int etats_finaux[] = {0, nb_states-1};
 
     double (*transitions)[nb_states][nb_actions][nb_states][nb_rewards] = malloc(sizeof (double[nb_states][nb_actions][nb_states][nb_rewards]));
 
-    for (int s = 1; s <= 2; s++) {
+    for (int s = 1; s <= nb_states-3; s++) {
         (*transitions)[s][1][s+1][1] = 1.0;
     }
     
-    for (int s = 2; s <= 3; s++) {
+    for (int s = nb_states-3; s <= nb_states-2; s++) {
         (*transitions)[s][0][s-1][1] = 1.0;
     }
 
-    (*transitions)[3][1][4][2] = 1.0;
+    (*transitions)[nb_states-2][1][nb_states-1][2] = 1.0;
     (*transitions)[1][0][0][0] = 1.0;
 
     double esperance[nb_states];
@@ -54,15 +54,30 @@ static void test_iterative()
 
         //test stratégie all left sur lineworld avec policy iterative
         ial_eval_policy_iterative(nb_states, nb_actions, policy_all_left, states, actions, nb_rewards, rewards, transitions, esperance, theta, gamma);
-        printf("all left : %lf\t%lf\t%lf\t%lf\t%lf\n", esperance[0], esperance[1], esperance[2], esperance[3], esperance[4]);
+        print_esperance(esperance,nb_states);
 
         //test stratégie all right sur lineworld avec policy iterative
         ial_eval_policy_iterative(nb_states, nb_actions, policy_all_right, states, actions, nb_rewards, rewards, transitions, esperance, theta, gamma);
-        printf("all right : %lf\t%lf\t%lf\t%lf\t%lf\n", esperance[0], esperance[1], esperance[2], esperance[3], esperance[4]);
+        print_esperance(esperance,nb_states);
+
+        //test stratégie all left sur lineworld avec policy iterative
+        ial_eval_policy_iterative(nb_states, nb_actions, policy_all_left, states, actions, nb_rewards, rewards, transitions, esperance, theta, gamma);
+        print_esperance(esperance,nb_states);
+
+        //test value iteration sur line world
+        val_iterative_policy(nb_states, nb_actions, states, actions, nb_rewards, rewards, transitions, esperance, theta, gamma);
+        print_esperance(esperance,nb_states);
     }
 
 
     free(transitions);
+}
+
+void print_esperance(double **esperance,int nbstate){
+    for (int s = 0 ; s<nbstate;s++){
+        printf("%lf\t",esperance[s]);
+    }
+    printf("\n");
 }
 
 int main(void) 
