@@ -93,14 +93,14 @@ void ial_policy_iteration(
 {
     double policy_random[nb_states][nb_actions];
     for(int s = 0; s < nb_states ; s++) {
-        int random_action = randint() % nb_actions;
-        policy_random[s][random_action] = randint() % 1;
+        //int random_action = randint() % nb_actions;
+        //policy_random[s][random_action] = randint() % 1;
     }
 
     bool policy_stable = true;
 
     for(int s = 0;s<nb_states;s++){
-        double **old_action = policy_random;
+        //double **old_action = policy_random;
         //a continuer
     }
 

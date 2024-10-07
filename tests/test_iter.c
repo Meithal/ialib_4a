@@ -5,7 +5,7 @@
 
 static void test_iterative()
 {
-    int states[] = { 0, 1, 2, 3};
+    int states[] = { 0, 1, 2, 3, 4, 5,6,7,8,9};
     int nb_states = sizeof states / sizeof states[0];
     enum {ACTION_LEFT, ACTION_RIGHT};
     int actions[] = {ACTION_LEFT, ACTION_RIGHT};
@@ -60,9 +60,6 @@ static void test_iterative()
             policy_all_right[s][ACTION_RIGHT] = 1;
         }
 
-        double theta = 0.0001;
-        double gamma = 0.9999;
-
         //test stratégie all right sur lineworld avec policy iterative
         ial_eval_policy_iterative(nb_states, nb_actions, policy_all_right, states, actions, nb_rewards, rewards, transitions, esperance, theta, gamma);
         print_esperance(esperance,nb_states);
@@ -73,7 +70,7 @@ static void test_iterative()
     free(transitions);
 }
 
-void print_esperance(double **esperance,int nbstate){
+void print_esperance(double *esperance,int nbstate){
     for (int s = 0 ; s<nbstate;s++){
         printf("%lf\t",esperance[s]);
     }

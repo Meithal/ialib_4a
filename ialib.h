@@ -7,6 +7,8 @@ double get_rand_float();
 double max(double a, double b);
 double min(double a, double b);
 
+void print_esperance(double *esperance,int nbstate);
+
 
 char* ial_version(void);
 
