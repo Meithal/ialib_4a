@@ -36,6 +36,9 @@ static void test_iterative()
         }
     }
 
+    double theta = 0.0001;
+    double gamma = 0.9999;
+
     {
         double policy_all_left[nb_states][nb_actions];
         for(int s = 0; s < nb_states ; s++) {
@@ -43,22 +46,27 @@ static void test_iterative()
             policy_all_left[s][ACTION_RIGHT] = 0;
         }
 
+        ///test stratégie all left sur lineworld avec policy iterative
+        ial_eval_policy_iterative(nb_states, nb_actions, policy_all_left, states, actions, nb_rewards, rewards, transitions, esperance, theta, gamma);
+        printf("all left : %lf\t%lf\t%lf\t%lf\t%lf\n", esperance[0], esperance[1], esperance[2], esperance[3], esperance[4]);
+
+
+    }
+
+    {
         double policy_all_right[nb_states][nb_actions];
         for(int s = 0; s < nb_states ; s++) {
             policy_all_right[s][ACTION_LEFT] = 0;
             policy_all_right[s][ACTION_RIGHT] = 1;
         }
 
-        double theta = 0.0001;
-        double gamma = 0.9999;
+        /// test stratégie all right sur lineworld avec policy iterative
+        ial_eval_policy_iterative(
+                nb_states, nb_actions, policy_all_right, states, actions,
+                nb_rewards, rewards, transitions, esperance, theta, gamma);
 
-        //test stratégie all left sur lineworld avec policy iterative
-        ial_eval_policy_iterative(nb_states, nb_actions, policy_all_left, states, actions, nb_rewards, rewards, transitions, esperance, theta, gamma);
-        printf("all left : %lf\t%lf\t%lf\t%lf\t%lf\n", esperance[0], esperance[1], esperance[2], esperance[3], esperance[4]);
-
-        //test stratégie all right sur lineworld avec policy iterative
-        ial_eval_policy_iterative(nb_states, nb_actions, policy_all_right, states, actions, nb_rewards, rewards, transitions, esperance, theta, gamma);
         printf("all right : %lf\t%lf\t%lf\t%lf\t%lf\n", esperance[0], esperance[1], esperance[2], esperance[3], esperance[4]);
+
     }
 
 
