@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "../ialib.h"
+#include "ialib.h"
 
 static void test_iterative()
 {
@@ -36,6 +36,9 @@ static void test_iterative()
         }
     }
 
+    double theta = 0.0001;
+    double gamma = 0.9999;
+
     {
         double policy_all_left[nb_states][nb_actions];
         for(int s = 0; s < nb_states ; s++) {
@@ -43,6 +46,14 @@ static void test_iterative()
             policy_all_left[s][ACTION_RIGHT] = 0;
         }
 
+        ///test stratégie all left sur lineworld avec policy iterative
+        ial_eval_policy_iterative(nb_states, nb_actions, policy_all_left, states, actions, nb_rewards, rewards, transitions, esperance, theta, gamma);
+        print_esperance(esperance,nb_states);
+
+
+    }
+
+    {
         double policy_all_right[nb_states][nb_actions];
         for(int s = 0; s < nb_states ; s++) {
             policy_all_right[s][ACTION_LEFT] = 0;
@@ -52,21 +63,10 @@ static void test_iterative()
         double theta = 0.0001;
         double gamma = 0.9999;
 
-        //test stratégie all left sur lineworld avec policy iterative
-        ial_eval_policy_iterative(nb_states, nb_actions, policy_all_left, states, actions, nb_rewards, rewards, transitions, esperance, theta, gamma);
-        print_esperance(esperance,nb_states);
-
         //test stratégie all right sur lineworld avec policy iterative
         ial_eval_policy_iterative(nb_states, nb_actions, policy_all_right, states, actions, nb_rewards, rewards, transitions, esperance, theta, gamma);
         print_esperance(esperance,nb_states);
 
-        //test stratégie all left sur lineworld avec policy iterative
-        ial_eval_policy_iterative(nb_states, nb_actions, policy_all_left, states, actions, nb_rewards, rewards, transitions, esperance, theta, gamma);
-        print_esperance(esperance,nb_states);
-
-        //test value iteration sur line world
-        val_iterative_policy(nb_states, nb_actions, states, actions, nb_rewards, rewards, transitions, esperance, theta, gamma);
-        print_esperance(esperance,nb_states);
     }
 
 

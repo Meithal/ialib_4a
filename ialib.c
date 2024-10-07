@@ -10,7 +10,7 @@ char* ial_version(void)
 }
 
 /**
- * Retourne une int entre 0 et RAND_MAX
+ * Retourne un int entre 0 et RAND_MAX
  */
 int get_random_int() {
     static int srand_called;
@@ -46,7 +46,7 @@ void ial_eval_policy_iterative(
     int env_S[nb_states],
     int env_A[nb_actions],
     int nb_rewards,
-    double env_R[nb_rewards],
+    const double env_R[nb_rewards],
     double (*env_probas)[nb_states][nb_actions][nb_states][nb_rewards],
     double esperance[nb_states],
     double theta,

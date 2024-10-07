@@ -11,5 +11,5 @@ mkdir build
 cd build
 cmake ..
 cmake --build .
-ctest .
+ctest --verbose .
 ```
