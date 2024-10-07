@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#include "ialib.h"
+#include "../ialib.h"
 
 int main()
 {

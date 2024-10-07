@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include <time.h>
 #include <math.h>
 
@@ -52,7 +53,9 @@ void ial_eval_policy_iterative(
 {
     while (1) {
         double delta = 0.0;
+
         for (int s = 0; s < nb_states; s++) {
+
             double v_prev = esperance[s];
             double total = 0.0;
             for (int a =0; a < nb_actions; a++) {
@@ -60,6 +63,7 @@ void ial_eval_policy_iterative(
                     for (int r_index = 0; r_index < nb_rewards; r_index++) {
                         double r = env_R[r_index];
                         total += pi[s][a] * (*env_probas)[s][a][s_p][r_index] * (r + gamma * esperance[s_p]);
+                        //printf("%f\n",(*env_probas)[s][a][s_p][r_index]);
                     }
                 }
             }
