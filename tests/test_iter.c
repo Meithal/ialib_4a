@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "../ialib.h"
+#include "ialib.h"
 
 static void test_iterative()
 {
