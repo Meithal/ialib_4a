@@ -20,7 +20,7 @@ static void test_iterative()
         (*transitions)[s][1][s+1][1] = 1.0;
     }
     
-    for (int s = nb_states-3; s <= nb_states-2; s++) {
+    for (int s = 2; s <= nb_states-2; s++) {
         (*transitions)[s][0][s-1][1] = 1.0;
     }
 
