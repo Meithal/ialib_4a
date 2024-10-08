@@ -70,7 +70,9 @@ void ial_eval_policy_iterative(
             }
 
             esperance[s] = total;
-            delta = max(delta, fabs(v_prev - esperance[s]));
+            printf("%f\n",delta);
+            delta = max(delta, abs(v_prev - esperance[s]));
+            printf("%f\n",delta);
         }
         
         if (delta < theta) {
@@ -80,6 +82,7 @@ void ial_eval_policy_iterative(
 }
 
 void ial_policy_iteration(
+
     int nb_states,
     int nb_actions,
     int env_S[nb_states],
@@ -91,18 +94,28 @@ void ial_policy_iteration(
     double theta,
     double gamma)
 {
+    enum {ACTION_LEFT, ACTION_RIGHT};
     double policy_random[nb_states][nb_actions];
     for(int s = 0; s < nb_states ; s++) {
-        //int random_action = randint() % nb_actions;
-        //policy_random[s][random_action] = randint() % 1;
+        srand(time(NULL));
+        float randomFloat = (float)rand() / (float)RAND_MAX;// Générer un nombre flottant aléatoire entre 0 et 1
+        policy_random[s][ACTION_LEFT] = randomFloat;
+        policy_random[s][ACTION_RIGHT] = 1-randomFloat;
     }
 
-    bool policy_stable = true;
+    while(1){
+        ial_eval_policy_iterative(nb_states, nb_actions, policy_random, env_S, env_A, nb_rewards, env_R, env_probas, esperance, theta, gamma);
+        bool policy_stable = true;
 
-    for(int s = 0;s<nb_states;s++){
-        //double **old_action = policy_random;
-        //a continuer
+        for(int s = 0;s<nb_states;s++){
+            double **old_action = policy_random; //?????
+            //double new_p = max(policy_random[s][ACTION_LEFT,])
+        } 
     }
+
+    
+
+
 
 
 }
