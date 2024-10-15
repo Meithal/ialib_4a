@@ -82,9 +82,11 @@ const double reward(int state, int action, int* out_state)
             rew = rewards[REW_NEUTRAL];
         }
     }
+    /** plus correct mais double le temps d'execution
     if(state == 0 || state == nb_states - 1) {
         rew = 0;
     }
+    */
 
     return rew;
 }

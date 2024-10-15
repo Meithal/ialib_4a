@@ -99,7 +99,7 @@ void ial_eval_policy_iterative_fun(
             for (int a =0; a < nb_actions; a++) {
                 int s_p;
                 double r = f_rew(s, a, &s_p);
-                total += pi[s][a] * 1 * (r + gamma * esperance[s_p]);
+                total += pi[s][a] * (r + gamma * esperance[s_p]);
                 //printf("%f\n",(*env_probas)[s][a][s_p][r_index]);
             }
 
