@@ -68,9 +68,7 @@ void ial_eval_policy_iterative(
             }
 
             esperance[s] = total;
-            printf("%f\n",delta);
             delta = max(delta, abs(v_prev - esperance[s]));
-            printf("%f\n",delta);
         }
         
         if (delta < theta) {
@@ -113,9 +111,8 @@ void ial_eval_policy_iterative_fun(
     }
 }
 
-/*
-void ial_policy_iteration(
 
+void ial_policy_iteration(
     int nb_states,
     int nb_actions,
     int nb_rewards,
@@ -130,26 +127,60 @@ void ial_policy_iteration(
     double policy_random[nb_states][nb_actions];
     for(int s = 0; s < nb_states ; s++) {
         srand(time(NULL));
-        float randomFloat = (float)rand() / (float)RAND_MAX;// Générer un nombre flottant aléatoire entre 0 et 1
+        float randomFloat = rand() / (float)RAND_MAX;// Générer un nombre flottant aléatoire entre 0 et 1
         policy_random[s][ACTION_LEFT] = randomFloat;
         policy_random[s][ACTION_RIGHT] = 1-randomFloat;
     }
 
     while(1){
-        ial_eval_policy_iterative(nb_states, nb_actions, policy_random, env_S, env_A, nb_rewards, env_R, env_probas, esperance, theta, gamma);
-        bool policy_stable = true;
+        ial_eval_policy_iterative(nb_states, nb_actions, policy_random, nb_rewards, env_R, env_probas, esperance, theta, gamma);
+        int policy_stable = 1;
 
         for(int s = 0;s<nb_states;s++){
             double **old_action = policy_random; //?????
             //double new_p = max(policy_random[s][ACTION_LEFT,])
         } 
     }
-
-    
-
-
-
-
 }
-*/
 
+void ial_policy_iteration_naive(
+        const int nb_states,
+        const int nb_actions,
+        const double (* const f_rew)(const int state, const int action, int *out_state),
+        const double theta,
+        const double gamma,
+        double pi[nb_states][nb_actions],
+        double esperance[nb_states]
+)
+{
+    while (1) {
+        double delta = 0.0;
+
+        for (int s = 0; s < nb_states; s++) {
+
+            double v_prev = esperance[s];
+            double best[nb_actions];
+            double total = 0;
+            for (int a =0; a < nb_actions; a++) {
+                int s_p;
+                double r = f_rew(s, a, &s_p);
+                best[a] = 1 * (r + gamma * esperance[s_p]);
+                total += 1 * (r + gamma * esperance[s_p]);
+
+                //printf("%f\n",(*env_probas)[s][a][s_p][r_index]);
+            }
+
+
+            for (int a = 0; a < nb_actions; ++a) {
+                pi[s][a] = best[a];
+            }
+
+            esperance[s] = total;
+            delta = max(delta, fabs(v_prev - esperance[s]));
+        }
+
+        if (delta < theta) {
+            break;
+        }
+    }
+}

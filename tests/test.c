@@ -23,4 +23,7 @@ int main()
     clock_getres(CLOCK_MONOTONIC_RAW_APPROX, &ts);
     printf("Précision de l'horloge uptime raw approx: %ld\n", ts.tv_nsec);
 
+    long t = get_nanoseconds();
+    printf("Duree approx entre deux instructions: %ld\n", get_nanoseconds() - t);
+
 }

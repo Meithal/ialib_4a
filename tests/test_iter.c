@@ -13,6 +13,9 @@ enum {nb_actions = sizeof actions / sizeof actions[0]};
 double rewards[] = {[REW_LOSS] = -1, [REW_NEUTRAL] = 0, [REW_WIN]=1};
 enum {nb_rewards = sizeof rewards / sizeof rewards[0]};
 
+double theta = 0.0001;
+double gamma = 0.9999;
+
 static void test_iterative()
 {
     double (*transitions)[nb_states][nb_actions][nb_states][nb_rewards] = malloc(sizeof (double[nb_states][nb_actions][nb_states][nb_rewards]));
@@ -95,8 +98,6 @@ static void test_iterative_fun()
 {
     {
         double esperance[nb_states] = { 0 };
-        double theta = 0.0001;
-        double gamma = 0.9999;
 
         double policy_all_right[nb_states][nb_actions];
         for(int s = 1; s < nb_states ; s++) {
@@ -111,7 +112,17 @@ static void test_iterative_fun()
 
 }
 
+void test_policy_iteration()
+{
+    double pi[nb_states][nb_actions] = { 0 };
+    double esperance[nb_states] = { 0 };
+
+    ial_policy_iteration_naive(nb_states, nb_actions, reward, theta, gamma, pi, esperance);
+    print_esperance(esperance,nb_states);
+}
+
 void print_esperance(double *esperance,int nbstate){
+
     for (int s = 0 ; s<nbstate;s++){
         printf("%lf\t",esperance[s]);
     }
@@ -128,5 +139,8 @@ int main(void)
     s = get_nanoseconds();
     test_iterative_fun();
     printf("spend %ld\n", get_nanoseconds() - s);
-
+    puts("policy iter");
+    s = get_nanoseconds();
+    test_policy_iteration();
+    printf("spend %ld\n", get_nanoseconds() - s);
 }
