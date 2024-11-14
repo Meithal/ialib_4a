@@ -51,14 +51,8 @@ static void test_iterative()
     double theta = 0.0001;
     double gamma = 0.9999;
 
-
-
-    //POLICIES DU GRID A FAIRE !!
-
-
-
     {
-        double policy_all_left[nb_states][nb_actions];
+        double policy_all_left[nb_states][nb_actions]; //policy en passant par le coin en bas à gauche
         for(int x = 0; x < nb_col ; x++) {
             for(int y=0;y<nb_row;y++){
                 if(y<nb_row-1){
