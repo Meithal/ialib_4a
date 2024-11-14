@@ -69,6 +69,7 @@ static void test_iterative()
 
             }
         }
+        
 
         ///test stratégie all left sur lineworld avec policy iterative
         ial_eval_policy_iterative(
