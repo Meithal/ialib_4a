@@ -21,8 +21,8 @@ static void test_iterative()
 {
     double (*transitions)[nb_states][nb_actions][nb_states][nb_rewards] = malloc(sizeof (double[nb_states][nb_actions][nb_states][nb_rewards]));
 
-    for(int x = 0 ; x<nb_col ;x++){
-        for(int y = 0 ; y<nb_row;y++){
+    for(int x = 0 ; x<nb_col ;x++) {
+        for(int y = 0 ; y<nb_row;y++) {
             if((x!=nb_col-1 || y!=0) && (x!=nb_col-1 || y!=nb_row-1)){//on evite les etats finaux (en haut à droite et en bas à droite)
                 if(x!=0){
                     (*transitions)[s][ACTION_LEFT][s-1][REW_NEUTRAL] = 1.0;
@@ -66,7 +66,6 @@ static void test_iterative()
                     policy_all_left[s][ACTION_BOTTOM] = 0;
                     policy_all_left[s][ACTION_UP] = 0;
                 }
-
             }
         }
         
@@ -81,7 +80,7 @@ static void test_iterative()
     free(transitions);
 }
 
-const double reward(int state, int action, int* out_state)
+double reward(int state, int action, int* out_state)
 {
     double rew;
     if(action == ACTION_LEFT) {
