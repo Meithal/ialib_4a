@@ -1,3 +1,8 @@
+Requirements
+---
+- Cmake
+- Compilateur C (visual studio...)
+
 Build
 ---
 
@@ -6,5 +11,5 @@ mkdir build
 cd build
 cmake ..
 cmake --build .
-ctest .
+ctest --verbose .
 ```
