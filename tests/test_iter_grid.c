@@ -29,6 +29,7 @@ static void test_iterative()
                 }
                 if(x!=nb_col-1){
                     (*transitions)[s][ACTION_RIGHT][s+1][REW_NEUTRAL] = 1.0;
+                    
                 }
                 if(y!=0){
                     (*transitions)[s][ACTION_UP][s-nb_col][REW_NEUTRAL] = 1.0;
