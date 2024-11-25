@@ -1,5 +1,7 @@
 #include <stdlib.h>
 #include <math.h>
+#include <assert.h>
+#include <float.h>
 
 #include "ialib.h"
 
@@ -10,7 +12,7 @@ char* ial_version(void)
 }
 
 /**
- * Retuens a int between 0 et RAND_MAX
+ * Returns a int between 0 et RAND_MAX
  */
 int random_int() {
     static int srand_called;
@@ -23,20 +25,27 @@ int random_int() {
     return rand();
 }
 
-/**
- * Retourne un flottant entre 0 et 1
- */
-double rand_float() {
-    return random_int() / (double)RAND_MAX;
+_Bool ial_same(double a, double b) {
+    return fabs(a - b) < DBL_EPSILON;
 }
 
-double max(double a, double b) {
-    return a > b ? a : b;
+
+void update_policy_probability(
+        int nb_actions, double(* policy)[nb_actions],
+        int action, double value) {
+    assert(value >=0. && value <= 1.);
+
+    double difference = value - (*policy)[action];
+    double to_remove = difference / (nb_actions - 1);
+    for (int i = 0; i < nb_actions; ++i) {
+        if(i == action) {
+            (*policy)[i] = value;
+        } else {
+            (*policy)[i] = (*policy)[i] - to_remove;
+        }
+    }
 }
 
-double min(double a, double b) {
-    return a < b ? a : b;
-}
 
 /**
  * Given a policy, calculates the value of each state if we keep following that policy
@@ -71,7 +80,7 @@ void ial_eval_policy_iterative(
             }
 
             state_value_for_policy[s] = total;
-            delta = max(delta, fabs(v_prev - state_value_for_policy[s]));
+            delta = fmax(delta, fabs(v_prev - state_value_for_policy[s]));
         }
         
         if (delta < theta) {
@@ -105,7 +114,7 @@ void ial_eval_policy_iterative_fun(
             }
 
             state_value_for_policy[s] = total;
-            delta = max(delta, fabs(v_prev - state_value_for_policy[s]));
+            delta = fmax(delta, fabs(v_prev - state_value_for_policy[s]));
         }
         
         if (delta < theta) {
@@ -122,7 +131,7 @@ void ial_policy_iteration(
     int env_A[nb_actions],
     double env_R[nb_rewards],
     double (*env_probas)[nb_states][nb_actions][nb_states][nb_rewards],
-    double esperance[nb_states],
+    double state_value_for_policy[nb_states],
     double theta,
     double gamma)
 {
@@ -136,7 +145,7 @@ void ial_policy_iteration(
     }
 
     while(1){
-        ial_eval_policy_iterative(nb_states, nb_actions, policy_random, nb_rewards, env_R, esperance, theta, gamma, );
+        ial_eval_policy_iterative(nb_states, nb_actions, policy_random, nb_rewards, env_R, state_value_for_policy, theta, gamma, );
         int policy_stable = 1;
 
         for(int s = 0;s<nb_states;s++){
@@ -154,7 +163,7 @@ void ial_policy_iteration_naive(
         const double theta,
         const double gamma,
         double pi[nb_states][nb_actions],
-        double esperance[nb_states]
+        double state_value_for_policy[nb_states]
 )
 {
     while (1) {
@@ -162,25 +171,22 @@ void ial_policy_iteration_naive(
 
         for (int s = 0; s < nb_states; s++) {
 
-            double v_prev = esperance[s];
+            double v_prev = state_value_for_policy[s];
             double best[nb_actions];
             double total = 0;
             for (int a =0; a < nb_actions; a++) {
                 int s_p;
                 double r = f_rew(nb_states, s, a, &s_p);
-                best[a] = 1 * (r + gamma * esperance[s_p]);
-                total += 1 * (r + gamma * esperance[s_p]);
-
-                //printf("%f\n",(*env_probas)[s][a][s_p][r_index]);
+                best[a] = 1 * (r + gamma * state_value_for_policy[s_p]);
+                total += 1 * (r + gamma * state_value_for_policy[s_p]);
             }
-
 
             for (int a = 0; a < nb_actions; ++a) {
                 pi[s][a] = best[a];
             }
 
-            esperance[s] = total;
-            delta = max(delta, fabs(v_prev - esperance[s]));
+            state_value_for_policy[s] = total;
+            delta = fmax(delta, fabs(v_prev - state_value_for_policy[s]));
         }
 
         if (delta < theta) {

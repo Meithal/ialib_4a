@@ -1,18 +1,14 @@
 #include <time.h>
 
 int random_int();
-/**
- * Retourne un floattant entre 0 et 1
- */
-double rand_float();
-double max(double a, double b);
-double min(double a, double b);
 
 static inline long get_nanoseconds() {
     struct timespec ts;
     clock_gettime(CLOCK_THREAD_CPUTIME_ID, &ts);
     return ts.tv_nsec;
 }
+
+_Bool ial_same(double a, double b);
 
 void print_esperance(double *esperance,int nbstate);
 
@@ -38,7 +34,12 @@ static inline int ialenv_get_nb_rewards(struct ial_env env) {
     return env._nb_rewards;
 }
 
-
+/**
+ * for a state in a policy, set a value and update the other
+ * ones so the sum remains 1.
+ */
+void update_policy_probability(int nb_actions, double(*)[nb_actions],
+                                  int action, double value);
 
 void ial_eval_policy_iterative(
     int nb_states,
@@ -80,7 +81,7 @@ void ial_policy_iteration_naive(
         double theta,
         double gamma,
         double pi[nb_states][nb_actions],
-        double esperance[nb_states]
+        double state_value_for_policy[nb_states]
 );
 
 void q_learning(
